@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		EFD407B626469CCF001698A2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EFD407B526469CCF001698A2 /* main.cpp */; };
+		EFD407C526469E3C001698A2 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EFD407C426469E3C001698A2 /* Game.cpp */; };
+		EFD407CB2646B171001698A2 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFD407C62646AFFD001698A2 /* SDL2.framework */; };
+		EFD407CC2646B171001698A2 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EFD407C62646AFFD001698A2 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -20,11 +23,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		EFD407CD2646B171001698A2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EFD407CC2646B171001698A2 /* SDL2.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		EFD407B226469CCF001698A2 /* SDL Pong */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "SDL Pong"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFD407B526469CCF001698A2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		EFD407BE26469CEF001698A2 /* Library */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Library; path = ../../Library; sourceTree = "<group>"; };
+		EFD407BF26469D11001698A2 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		EFD407C326469D6C001698A2 /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+		EFD407C426469E3C001698A2 /* Game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
+		EFD407C62646AFFD001698A2 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDL2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFD407CB2646B171001698A2 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +63,7 @@
 			children = (
 				EFD407B426469CCF001698A2 /* SDL Pong */,
 				EFD407B326469CCF001698A2 /* Products */,
+				EFD407BD26469CEF001698A2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,8 +79,20 @@
 			isa = PBXGroup;
 			children = (
 				EFD407B526469CCF001698A2 /* main.cpp */,
+				EFD407C326469D6C001698A2 /* Game.h */,
+				EFD407C426469E3C001698A2 /* Game.cpp */,
 			);
 			path = "SDL Pong";
+			sourceTree = "<group>";
+		};
+		EFD407BD26469CEF001698A2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EFD407BF26469D11001698A2 /* SDL2.framework */,
+				EFD407C62646AFFD001698A2 /* SDL2.framework */,
+				EFD407BE26469CEF001698A2 /* Library */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -72,6 +105,7 @@
 				EFD407AE26469CCF001698A2 /* Sources */,
 				EFD407AF26469CCF001698A2 /* Frameworks */,
 				EFD407B026469CCF001698A2 /* CopyFiles */,
+				EFD407CD2646B171001698A2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -119,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFD407B626469CCF001698A2 /* main.cpp in Sources */,
+				EFD407C526469E3C001698A2 /* Game.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +197,8 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				EXCLUDED_ARCHS = arm64;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -170,17 +207,23 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 11.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
+				SYSTEM_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -221,25 +264,41 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXCLUDED_ARCHS = arm64;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 11.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				SDKROOT = macosx;
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
+				SYSTEM_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};
 		EFD407BA26469CCF001698A2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_STYLE = Automatic;
+				EXCLUDED_ARCHS = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -247,7 +306,15 @@
 		EFD407BB26469CCF001698A2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_STYLE = Automatic;
+				EXCLUDED_ARCHS = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
