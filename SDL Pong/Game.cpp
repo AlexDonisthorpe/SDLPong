@@ -95,9 +95,55 @@ void Game::ProcessInput()
 
 void Game::GenerateOutput()
 {
+    const uint thickness = 15;
+    
+    // Set the renderer background color
     SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
+    
+    // Clear the back buffer & fill with draw color
     SDL_RenderClear(mRenderer);
     
+    // Set color of next object
+    SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+    
+    SDL_Rect ceiling
+    {
+        0,
+        0,
+        1024,
+        thickness
+    };
+    
+    SDL_Rect floor
+    {
+        0,
+        768-thickness,
+        1024,
+        thickness
+    };
+    
+    SDL_Rect leftWall
+    {
+        0,
+        0,
+        thickness,
+        768
+    };
+    
+    SDL_Rect rightWall
+    {
+        1024-thickness,
+        0,
+        thickness,
+        768
+    };
+    
+    SDL_RenderFillRect(mRenderer, &ceiling);
+    SDL_RenderFillRect(mRenderer, &floor);
+    SDL_RenderFillRect(mRenderer, &leftWall);
+    SDL_RenderFillRect(mRenderer, &rightWall);
+    
+    // Swap the buffers
     SDL_RenderPresent(mRenderer);
 }
 
