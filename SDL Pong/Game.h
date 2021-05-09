@@ -10,6 +10,12 @@
 
 #include "SDL2.framework/Headers/SDL.h"
 
+struct Vector2
+{
+    float x;
+    float y;
+};
+
 class Game
 {
 public:
@@ -27,6 +33,13 @@ private:
     SDL_Renderer *mRenderer;
     
     bool mIsRunning = true;
+    
+    const int mPaddleLength = 100;
+    const int thickness = 15;
+    
+    Vector2 mBallPosition;
+    Vector2 mLeftPaddlePosition;
+    Vector2 mRightPaddlePosition;
 };
 
 

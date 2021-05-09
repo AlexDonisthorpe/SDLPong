@@ -10,7 +10,7 @@
 
 Game::Game()
 {
-    
+
 }
 
 bool Game::Initialize()
@@ -45,6 +45,17 @@ bool Game::Initialize()
         SDL_Log("Couldn't create renderer: %s", SDL_GetError());
         return false;
     }
+    
+    // Set Object Positions
+    mBallPosition.x = 512;
+    mBallPosition.y = 384;
+    
+    mLeftPaddlePosition.x = 30;
+    mLeftPaddlePosition.y = 384;
+    
+    mRightPaddlePosition.x = 1024 - 30;
+    mRightPaddlePosition.y = 384;
+    
     
     SDL_Log("Game Initialised");
     return true;
@@ -95,7 +106,7 @@ void Game::ProcessInput()
 
 void Game::GenerateOutput()
 {
-    const uint thickness = 15;
+    
     
     // Set the renderer background color
     SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
@@ -138,10 +149,38 @@ void Game::GenerateOutput()
         768
     };
     
+    SDL_Rect ball
+    {
+        static_cast<int>(mBallPosition.x - thickness/2),
+        static_cast<int>(mBallPosition.y - thickness/2),
+        thickness,
+        thickness
+    };
+    
+    SDL_Rect leftPaddle
+    {
+        static_cast<int>(mLeftPaddlePosition.x - thickness/2),
+        static_cast<int>(mLeftPaddlePosition.y - thickness/2 - mPaddleLength/2),
+        thickness,
+        mPaddleLength
+    };
+    
+    SDL_Rect rightPaddle
+    {
+        static_cast<int>(mRightPaddlePosition.x - thickness/2),
+        static_cast<int>(mRightPaddlePosition.y - thickness/2 - mPaddleLength/2),
+        thickness,
+        mPaddleLength
+    };
+    
     SDL_RenderFillRect(mRenderer, &ceiling);
     SDL_RenderFillRect(mRenderer, &floor);
     SDL_RenderFillRect(mRenderer, &leftWall);
     SDL_RenderFillRect(mRenderer, &rightWall);
+    
+    SDL_RenderFillRect(mRenderer, &ball);
+    SDL_RenderFillRect(mRenderer, &leftPaddle);
+    SDL_RenderFillRect(mRenderer, &rightPaddle);
     
     // Swap the buffers
     SDL_RenderPresent(mRenderer);
