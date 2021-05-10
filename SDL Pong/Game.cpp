@@ -9,8 +9,14 @@
 #include "Game.h"
 
 Game::Game()
+    :mWindow(nullptr)
+    ,mRenderer(nullptr)
+    ,mTicksCount(0)
+    ,mIsRunning(true)
+    ,mLeftPaddleDirection(0)
+    ,mRightPaddleDirection(0)
 {
-    mTicksCount = 0;
+    
 }
 
 bool Game::Initialize()
@@ -56,7 +62,8 @@ bool Game::Initialize()
     mRightPaddlePosition.x = 1024 - 30;
     mRightPaddlePosition.y = 384;
     
-    
+    mBallVelocity.x = -200.0f;
+    mBallVelocity.y = 235.0f;
     
     SDL_Log("Game Initialised");
     return true;
@@ -229,6 +236,34 @@ void Game::UpdateGame()
     
     MovePaddle(mLeftPaddlePosition, mLeftPaddleDirection, deltaTime);
     MovePaddle(mRightPaddlePosition, mRightPaddleDirection, deltaTime);
+    
+    mBallPosition.x += mBallVelocity.x * deltaTime;
+    mBallPosition.y += mBallVelocity.y * deltaTime;
+    
+    // Check if ball is hitting the roof
+    if(mBallPosition.y <= thickness && mBallVelocity.y < 0.0f)
+    {
+        mBallVelocity.y *= -1;
+    }
+    
+    // Check if the ball is hitting the floor
+    if(mBallPosition.y >= 768-thickness && mBallVelocity.y > 0.0f)
+    {
+        mBallVelocity.y *= -1;
+    }
+    
+    // Check Left Wall
+    if(mBallPosition.x <= thickness && mBallVelocity.x < 0.0f)
+    {
+        mBallVelocity.x *= -1;
+    }
+    
+    // Check Right Wall
+    if(mBallPosition.x >= 1024-thickness && mBallVelocity.x > 0.0f)
+    {
+        mBallVelocity.x *= -1;
+    }
+    
     
     mTicksCount = SDL_GetTicks();
 }
