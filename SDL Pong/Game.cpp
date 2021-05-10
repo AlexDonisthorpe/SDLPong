@@ -10,7 +10,7 @@
 
 Game::Game()
 {
-
+    mTicksCount = 0;
 }
 
 bool Game::Initialize()
@@ -57,6 +57,7 @@ bool Game::Initialize()
     mRightPaddlePosition.y = 384;
     
     
+    
     SDL_Log("Game Initialised");
     return true;
     
@@ -101,6 +102,31 @@ void Game::ProcessInput()
     if(KeyboardState[SDL_SCANCODE_ESCAPE])
     {
         mIsRunning = false;
+    }
+    
+    // Left Paddle input
+    mLeftPaddleDirection = 0;
+    if(KeyboardState[SDL_SCANCODE_W])
+    {
+        // negative y
+        mLeftPaddleDirection -= 1;
+    }
+    
+    if(KeyboardState[SDL_SCANCODE_S])
+    {
+        mLeftPaddleDirection += 1;
+    }
+    
+    // Right Paddle input
+    mRightPaddleDirection = 0;
+    if(KeyboardState[SDL_SCANCODE_UP])
+    {
+        // negative y
+        mRightPaddleDirection -= 1;
+    }
+    if(KeyboardState[SDL_SCANCODE_DOWN])
+    {
+        mRightPaddleDirection += 1;
     }
 }
 
@@ -188,7 +214,38 @@ void Game::GenerateOutput()
 
 void Game::UpdateGame()
 {
+    // Waiting to ensure maximum frame-rate is 60fps
+    while(!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
+        ;
     
+    // deltaTime in seconds
+    float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
+    
+    // Clamping deltaTime
+    if(deltaTime > 0.05f)
+    {
+        deltaTime = 0.05f;
+    }
+    
+    MovePaddle(mLeftPaddlePosition, mLeftPaddleDirection, deltaTime);
+    MovePaddle(mRightPaddlePosition, mRightPaddleDirection, deltaTime);
+    
+    mTicksCount = SDL_GetTicks();
 }
 
+void Game::MovePaddle(Vector2 &paddlePosition, int &paddleDirection, float deltaTime)
+{
+    if(paddleDirection != 0)
+    {
+        paddlePosition.y += paddleDirection * 300.0f * deltaTime;
+    }
+    
+    if(paddlePosition.y < (mPaddleLength / 2.0f + 2 * thickness))
+    {
+        paddlePosition.y = mPaddleLength/2.0f + 2 * thickness;
+    } else if(paddlePosition.y > (768.0f - mPaddleLength/2.0f - thickness))
+    {
+        paddlePosition.y = (768.0f - mPaddleLength/2.0f - thickness);
+    }
+}
 

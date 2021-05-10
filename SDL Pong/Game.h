@@ -28,6 +28,7 @@ private:
     void ProcessInput();
     void UpdateGame();
     void GenerateOutput();
+    void MovePaddle(Vector2 &paddlePosition, int &paddleDirection, float deltaTime);
     
     SDL_Window *mWindow;
     SDL_Renderer *mRenderer;
@@ -36,6 +37,10 @@ private:
     
     const int mPaddleLength = 100;
     const int thickness = 15;
+    int mLeftPaddleDirection;
+    int mRightPaddleDirection;
+    
+    Uint32 mTicksCount;
     
     Vector2 mBallPosition;
     Vector2 mLeftPaddlePosition;
