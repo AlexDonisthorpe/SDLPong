@@ -274,6 +274,15 @@ void Game::UpdateGame()
         }
     }
     
+    // Check ball right paddle
+    if(mBallPosition.x < mRightPaddlePosition.x + thickness/2 &&
+       mBallPosition.x > mRightPaddlePosition.x - thickness/2)
+    {
+        if(mBallPosition.y >= mRightPaddlePosition.y - mPaddleLength/2 &&
+           mBallPosition.y <= mRightPaddlePosition.y + mPaddleLength/2){
+            mBallVelocity.x *= -1;
+        }
+    }
     
     mTicksCount = SDL_GetTicks();
 }
