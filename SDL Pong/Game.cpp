@@ -264,6 +264,16 @@ void Game::UpdateGame()
         mBallVelocity.x *= -1;
     }
     
+    // Check ball left paddle
+    if(mBallPosition.x < mLeftPaddlePosition.x + thickness/2 &&
+       mBallPosition.x > mLeftPaddlePosition.x - thickness/2)
+    {
+        if(mBallPosition.y >= mLeftPaddlePosition.y - mPaddleLength/2 &&
+           mBallPosition.y <= mLeftPaddlePosition.y + mPaddleLength/2){
+            mBallVelocity.x *= -1;
+        }
+    }
+    
     
     mTicksCount = SDL_GetTicks();
 }
