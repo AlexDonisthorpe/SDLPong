@@ -52,18 +52,20 @@ bool Game::Initialize()
         return false;
     }
     
-    // Set Object Positions
-    mBallPosition.x = 512;
-    mBallPosition.y = 384;
-    
+    // Set Paddle Starting Positions
     mLeftPaddlePosition.x = 30;
     mLeftPaddlePosition.y = 384;
     
     mRightPaddlePosition.x = 1024 - 30;
     mRightPaddlePosition.y = 384;
     
-    mBallVelocity.x = -200.0f;
-    mBallVelocity.y = 235.0f;
+    mBall1.Init(512, 384, -200.0f, 235.0f);
+    mBall2.Init(512, 200, 200.0f, -235.0f);
+    mBall3.Init(512, 640, -300.0f, 150.0f);
+    
+    mBallsInPlay.push_back(mBall1);
+    mBallsInPlay.push_back(mBall2);
+    mBallsInPlay.push_back(mBall3);
     
     SDL_Log("Game Initialised");
     return true;
@@ -182,14 +184,6 @@ void Game::GenerateOutput()
         768
     };
     
-    SDL_Rect ball
-    {
-        static_cast<int>(mBallPosition.x - thickness/2),
-        static_cast<int>(mBallPosition.y - thickness/2),
-        thickness,
-        thickness
-    };
-    
     SDL_Rect leftPaddle
     {
         static_cast<int>(mLeftPaddlePosition.x - thickness/2),
@@ -206,17 +200,80 @@ void Game::GenerateOutput()
         mPaddleLength
     };
     
+    SDL_Rect Balls[mBallsInPlay.size()];
+    
+    for(int i = 0; i < mBallsInPlay.size(); i++)
+    {
+        Balls[i].x = static_cast<int>(mBallsInPlay[i].position.x - thickness/2);
+        Balls[i].y = static_cast<int>(mBallsInPlay[i].position.y - thickness/2);
+        Balls[i].h = thickness;
+        Balls[i].w = thickness;
+        SDL_RenderFillRect(mRenderer, &Balls[i]);
+        
+    }
+    
     SDL_RenderFillRect(mRenderer, &ceiling);
     SDL_RenderFillRect(mRenderer, &floor);
     SDL_RenderFillRect(mRenderer, &leftWall);
     SDL_RenderFillRect(mRenderer, &rightWall);
     
-    SDL_RenderFillRect(mRenderer, &ball);
+    
     SDL_RenderFillRect(mRenderer, &leftPaddle);
     SDL_RenderFillRect(mRenderer, &rightPaddle);
     
     // Swap the buffers
     SDL_RenderPresent(mRenderer);
+    
+}
+
+void Game::MoveBall(Ball &ball, float deltaTime) {
+    ball.position.x += ball.velocity.x * deltaTime;
+    ball.position.y += ball.velocity.y * deltaTime;
+    
+    
+    // Check if ball is hitting the roof
+    if(ball.position.y <= thickness && ball.velocity.y < 0.0f)
+    {
+        ball.velocity.y *= -1;
+    }
+    
+    // Check if the ball is hitting the floor
+    if(ball.position.y >= 768-thickness && ball.velocity.y > 0.0f)
+    {
+        ball.velocity.y *= -1;
+    }
+    
+    // Check Left Wall
+    if(ball.position.x <= thickness && ball.velocity.x < 0.0f)
+    {
+        ball.velocity.x *= -1;
+    }
+    
+    // Check Right Wall
+    if(ball.position.x >= 1024-thickness && ball.velocity.x > 0.0f)
+    {
+        ball.velocity.x *= -1;
+    }
+    
+    // Check ball left paddle
+    if(ball.position.x < mLeftPaddlePosition.x + thickness/2 &&
+       ball.position.x > mLeftPaddlePosition.x - thickness/2)
+    {
+        if(ball.position.y >= mLeftPaddlePosition.y - mPaddleLength/2 &&
+           ball.position.y <= mLeftPaddlePosition.y + mPaddleLength/2){
+            ball.velocity.x *= -1;
+        }
+    }
+    
+    // Check ball right paddle
+    if(ball.position.x < mRightPaddlePosition.x + thickness/2 &&
+       ball.position.x > mRightPaddlePosition.x - thickness/2)
+    {
+        if(ball.position.y >= mRightPaddlePosition.y - mPaddleLength/2 &&
+           ball.position.y <= mRightPaddlePosition.y + mPaddleLength/2){
+            ball.velocity.x *= -1;
+        }
+    }
 }
 
 void Game::UpdateGame()
@@ -237,52 +294,11 @@ void Game::UpdateGame()
     MovePaddle(mLeftPaddlePosition, mLeftPaddleDirection, deltaTime);
     MovePaddle(mRightPaddlePosition, mRightPaddleDirection, deltaTime);
     
-    mBallPosition.x += mBallVelocity.x * deltaTime;
-    mBallPosition.y += mBallVelocity.y * deltaTime;
-    
-    // Check if ball is hitting the roof
-    if(mBallPosition.y <= thickness && mBallVelocity.y < 0.0f)
+    for(int i = 0; i < mBallsInPlay.size(); i++)
     {
-        mBallVelocity.y *= -1;
+        MoveBall(mBallsInPlay[i], deltaTime);
     }
     
-    // Check if the ball is hitting the floor
-    if(mBallPosition.y >= 768-thickness && mBallVelocity.y > 0.0f)
-    {
-        mBallVelocity.y *= -1;
-    }
-    
-    // Check Left Wall
-    if(mBallPosition.x <= thickness && mBallVelocity.x < 0.0f)
-    {
-        mBallVelocity.x *= -1;
-    }
-    
-    // Check Right Wall
-    if(mBallPosition.x >= 1024-thickness && mBallVelocity.x > 0.0f)
-    {
-        mBallVelocity.x *= -1;
-    }
-    
-    // Check ball left paddle
-    if(mBallPosition.x < mLeftPaddlePosition.x + thickness/2 &&
-       mBallPosition.x > mLeftPaddlePosition.x - thickness/2)
-    {
-        if(mBallPosition.y >= mLeftPaddlePosition.y - mPaddleLength/2 &&
-           mBallPosition.y <= mLeftPaddlePosition.y + mPaddleLength/2){
-            mBallVelocity.x *= -1;
-        }
-    }
-    
-    // Check ball right paddle
-    if(mBallPosition.x < mRightPaddlePosition.x + thickness/2 &&
-       mBallPosition.x > mRightPaddlePosition.x - thickness/2)
-    {
-        if(mBallPosition.y >= mRightPaddlePosition.y - mPaddleLength/2 &&
-           mBallPosition.y <= mRightPaddlePosition.y + mPaddleLength/2){
-            mBallVelocity.x *= -1;
-        }
-    }
     
     mTicksCount = SDL_GetTicks();
 }
